@@ -91,6 +91,10 @@ const Scene = () => {
               deepAnalyze={true}
               colorBlind={false}
               minimal={false}
+              chart={{
+                hz: 120,
+                length:120
+              }}
             />
           )}
 
