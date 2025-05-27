@@ -1,0 +1,12 @@
+.paint-sample-container {
+  @apply flex gap-2;
+  animation: fade-up 0.5s;
+}
+
+.paint-samples {
+  @apply flex flex-row gap-[0.3rem];
+}
+
+.paint-samples-button {
+  @apply p-5 cursor-pointer rounded-sm hover:scale-110 active:scale-95 transition-all;
+}

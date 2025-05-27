@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "Fjalla One";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/FjallaOne-Regular.ttf");
+}
+
+#middle {
+  @apply text-white h-full p-7 lg:p-14 flex flex-col justify-between;
+  animation: fade-in 1s;
+}
+
+.mobile-car-manu-model {
+  @apply 2xl:hidden text-white;
+}
+
+.current-car-container {
+  @apply hidden 2xl:flex flex-col px-14 text-white/50 leading-4 uppercase;
+}
+
+.current-car {
+  @apply flex items-center gap-2;
+}
+
+.logo-container {
+  @apply flex flex-row items-center justify-start gap-4;
+}

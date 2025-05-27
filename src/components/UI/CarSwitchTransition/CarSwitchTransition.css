@@ -1,0 +1,4 @@
+.car-switch-transition {
+  @apply flex justify-center items-center;
+  animation: fade-in 0.75s;
+}

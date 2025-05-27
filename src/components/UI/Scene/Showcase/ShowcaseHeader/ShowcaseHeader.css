@@ -1,0 +1,9 @@
+.showcase-header {
+  @apply flex py-3 px-6 justify-between backdrop-blur bg-black/40;
+  animation: fade-down 0.5s;
+}
+
+.ui-btn {
+  @apply text-white/40 text-sm hover:text-white/80 hover:scale-105 active:scale-95 hover:bg-white/20 transition-all outline outline-1 outline-white/30 hover:outline-white/90 rounded-sm py-3 px-5;
+  visibility: visible !important;
+}

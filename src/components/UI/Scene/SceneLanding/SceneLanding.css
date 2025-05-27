@@ -1,0 +1,4 @@
+.scene-landing-menu {
+    @apply flex justify-center items-center flex-row gap-5 max-h-[6rem] h-full p-6 bg-black/40;
+    animation: fade-up 0.5s;
+}
