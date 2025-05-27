@@ -1,22 +1,64 @@
-﻿# Gran Turismo Inspired Car Showroom Scene (v2)
- A car showroom mainly inspired by the one in Gran Turismo Sport, and made with React-Three-Fiber, Tailwind + Shadcn and Zustand. The old version (version 1) which was limited to only 1 car can be found [here](https://github.com/jdichh/car-showroom-R3F). <br/> <br/> Models and textures were sourced from CSR Racing 2 then edited with Blender, and engine audio files were sourced from various videos in YouTube then edited with Tenacity. Car data/info sourced from the Gran Turismo 7 game wiki and official manufacturer information available online.
+﻿# Car Showroom 3D Web Application
 
-## Demo
-https://github.com/jdichh/car-showroom-r3f-v2/assets/90493623/ea953291-8fb7-43f8-96b1-d621082e7ca2
+A modern, interactive 3D car showroom web application built with React, React-Three-Fiber, Zustand, and Tailwind CSS. This project allows users to explore, view, and interact with a collection of high-quality car models in a virtual showroom environment.
 
-## Challenges Faced and How It Was Solved
-<ul>
- <li>State management with React Context (for menu items, car paint states, current car state, etc.), used Zustand instead to simplify</li>
- <li>UI responsiveness, but it is not meant for mobile devices as it can be too performance-heavy for them (I just made the UI responsive in case a user's mobile device can run it properly.)</li>
-</ul>
+## Team Members
 
-## Project setup
-If you want to try this out for yourself, download the source code, open the folder in VSCode/VSCodium, and run these lines of code.
-```
-pnpm install
-```
+- Ngô Đức Lộc - 22520790
+- Trần Phước Lộc - 22520797
+- Nguyễn Thái Đăng Khoa - 22520679
+- Bùi Duy Phúc - 22521108
 
-### Compiles and hot-reloads for development
-```
-pnpm run dev
-```
+## Features
+
+- Realistic 3D car models with interactive camera controls
+- Dynamic lighting and showroom environment
+- Car information display (specs, stats, etc.)
+- Smooth transitions and UI for car selection and customization
+- Performance monitor for real-time FPS and system stats
+
+## Technologies Used
+
+- React & TypeScript
+- React-Three-Fiber (Three.js)
+- Zustand (state management)
+- Tailwind CSS (UI styling)
+- Vite (build tool)
+
+## How to Run
+
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+   (You can use `npm` or `yarn` if you prefer.)
+
+2. **Start the development server:**
+   ```bash
+   pnpm run dev
+   ```
+
+3. **Open your browser and visit:**
+   ```
+   http://localhost:5173
+   ```
+
+## Project Structure
+
+- `src/components/` — React components for the scene, UI, and car models
+- `src/lib/` — State management and utility functions
+- `public/` — Static assets (models, textures, audio, etc.)
+
+## Notes
+
+- This project is optimized for desktop browsers and may be performance-heavy on low-end devices.
+- All 3D models and assets used are for educational purposes only.
+
+## Screenshots
+
+![Showroom Screenshot](./screenshot.png)
+
+---
+
+> This project was developed as a team assignment for CS105.
+> Instructor: Cap Dinh Thang
