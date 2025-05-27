@@ -56,7 +56,8 @@ A modern, interactive 3D car showroom web application built with React, React-Th
 
 ## Screenshots
 
-![Showroom Screenshot](./screenshot.png)
+![image](https://github.com/user-attachments/assets/3eecc5a0-a3b5-4b20-be83-d0f13b566f09)
+
 
 ---
 
