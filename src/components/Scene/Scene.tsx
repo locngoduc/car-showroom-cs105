@@ -105,8 +105,8 @@ const Scene = () => {
           <OrbitControls
             makeDefault
             enablePan={false}
-            autoRotate={false}
-            autoRotateSpeed={0.4}
+            autoRotate={true}
+            autoRotateSpeed={0.6}
             minPolarAngle={1.15}
             maxPolarAngle={Math.PI - 1.55}
             enableZoom={false}
