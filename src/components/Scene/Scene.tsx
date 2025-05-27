@@ -7,6 +7,7 @@ import {
   TrackballControls
 } from "@react-three/drei";
 import { Suspense, useEffect, useRef } from "react";
+import { Perf } from "r3f-perf";
 import { carModelComponents } from "../../lib/carModelComponents";
 import { maxDistance } from "../../lib/constants/constants";
 import { CarManufacturer } from "../../lib/types/types";
@@ -24,7 +25,7 @@ import Floor from "./Floor/Floor";
 import ShowroomObjects from "./ShowroomObjects/ShowroomObjects";
 
 const Scene = () => {
-  const { isInShowcaseMenu } = useUIStore();
+  const { isInShowcaseMenu, isUIVisible, isPerfVisible } = useUIStore();
   const { color, setColor } = useCarColorStore();
   const { isLoading, setIsLoading, isModelReady, setIsModelReady } = useLoadingStateStore();
   const { isFloorVisible, setIsFloorVisible } = useFloorStateStore();
@@ -82,6 +83,17 @@ const Scene = () => {
           />
 
           <Lighting />
+
+          {/* Performance monitor - shows when UI is open and perf is enabled */}
+          {isUIVisible && isPerfVisible && (
+            <Perf 
+              position="top-left"
+              showGraph={true}
+              deepAnalyze={true}
+              colorBlind={false}
+              minimal={false}
+            />
+          )}
 
           {/* for smooth zooming */}
           <TrackballControls

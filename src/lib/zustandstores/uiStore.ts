@@ -15,6 +15,9 @@ type UITypes = {
   isInCarSelection: boolean;
   setIsInCarSelection: (isInCarSelection: boolean) => void;
   toggleCarSelection: () => void;
+  isPerfVisible: boolean;
+  setIsPerfVisible: (isPerfVisible: boolean) => void;
+  togglePerf: () => void;
 };
 
 export const useUIStore = create<UITypes>()((set) => ({
@@ -32,4 +35,7 @@ export const useUIStore = create<UITypes>()((set) => ({
   isInCarSelection: false,
   setIsInCarSelection: () => set((state) => ({ isInCarSelection: !state.isInCarSelection})),
   toggleCarSelection: () => set((state) => ({ isInCarSelection: !state.isInCarSelection})),
+  isPerfVisible: false,
+  setIsPerfVisible: (isPerfVisible: boolean) => set({ isPerfVisible }),
+  togglePerf: () => set((state) => ({ isPerfVisible: !state.isPerfVisible })),
 }));

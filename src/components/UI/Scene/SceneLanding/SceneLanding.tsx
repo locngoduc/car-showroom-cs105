@@ -1,4 +1,5 @@
 import { BiSolidDetail } from "react-icons/bi";
+import { AiOutlineLineChart } from "react-icons/ai";
 import { iconColor, iconSize } from "../../../../lib/constants/constants";
 import { useUIStore } from "../../../../lib/zustandstores/uiStore";
 import "./SceneLanding.css";
@@ -13,6 +14,8 @@ const SceneLanding = () => {
     isUIVisible,
     setIsInShowcaseMenu,
     toggleUI,
+    isPerfVisible,
+    togglePerf,
   } = useUIStore();
 
   const UIHandler = () => {
@@ -29,9 +32,19 @@ const SceneLanding = () => {
         {!isInPaintSelection && <SceneLandingCarSelection />}
         {!isInCarSelection && <SceneLandingPaintSelection />}
         {!isInCarSelection && !isInPaintSelection && (
-          <button className="ui-btn" onClick={() => UIHandler()}>
-            <BiSolidDetail color={iconColor} size={iconSize} />
-          </button>
+          <div className="flex gap-2">
+            <button 
+              className="ui-btn" 
+              onClick={() => togglePerf()}
+              aria-label="Toggle performance monitor"
+              style={{ backgroundColor: isPerfVisible ? 'rgba(0, 255, 136, 0.2)' : 'transparent' }}
+            >
+              <AiOutlineLineChart color={isPerfVisible ? "#00ff88" : iconColor} size={iconSize} />
+            </button>
+            <button className="ui-btn" onClick={() => UIHandler()}>
+              <BiSolidDetail color={iconColor} size={iconSize} />
+            </button>
+          </div>
         )}
       </div>
     </div>

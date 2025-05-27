@@ -5,6 +5,7 @@ import "./ShowcaseHeader.css";
 import { IoCaretBackOutline } from "react-icons/io5";
 import { iconColor, iconSize } from "../../../../../lib/constants/constants";
 import { BiSolidTachometer } from "react-icons/bi";
+import { AiOutlineLineChart } from "react-icons/ai";
 
 const ShowcaseHeader = () => {
   const {
@@ -15,6 +16,8 @@ const ShowcaseHeader = () => {
     isInPaintSelection,
     setIsInCarSelection,
     setIsInPaintSelection,
+    isPerfVisible,
+    togglePerf,
   } = useUIStore();
   const { startEngine } = useContext(EngineContext);
 
@@ -46,6 +49,14 @@ const ShowcaseHeader = () => {
           aria-label="Start engine."
         >
           <BiSolidTachometer size={iconSize} color={iconColor} />
+        </button>
+        <button
+          onClick={togglePerf}
+          className="ui-btn"
+          aria-label="Toggle performance monitor."
+          style={{ backgroundColor: isPerfVisible ? 'rgba(0, 255, 136, 0.2)' : 'transparent' }}
+        >
+          <AiOutlineLineChart size={iconSize} color={isPerfVisible ? "#00ff88" : iconColor} />
         </button>
         <button
           onClick={toggleUI}
