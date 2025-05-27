@@ -21,6 +21,7 @@ import LoadingSpinner from "../UI/LoadingSpinner/LoadingSpinner";
 import SceneLanding from "../UI/Scene/SceneLanding/SceneLanding";
 import Showcase from "../UI/Scene/Showcase/Showcase";
 import Floor from "./Floor/Floor";
+import ShowroomObjects from "./ShowroomObjects/ShowroomObjects";
 
 const Scene = () => {
   const { isInShowcaseMenu } = useUIStore();
@@ -132,6 +133,9 @@ const Scene = () => {
 
           {/* prevents floor plane from flashing between the landing page and canvas transition */}
           {isFloorVisible === true ? <Floor /> : ""}
+
+          {/* Add showroom objects for enhanced atmosphere */}
+          {isModelReady && <ShowroomObjects />}
 
           <Html fullscreen>
             {isInShowcaseMenu === true ? (
