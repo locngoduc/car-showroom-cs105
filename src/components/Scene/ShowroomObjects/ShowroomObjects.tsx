@@ -4,55 +4,30 @@ import { useRef } from "react";
 import * as THREE from "three";
 
 const ShowroomObjects = () => {
-  const barrierGroupRef = useRef<THREE.Group>(null);
   const infoDisplayRef = useRef<THREE.Group>(null);
-  const conesRef = useRef<THREE.Group>(null);
 
-  // Subtle animation for info displays
+  // Reduced animation for better performance
   useFrame((state) => {
     if (infoDisplayRef.current) {
-      infoDisplayRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-    }
-    // Subtle floating animation for cones
-    if (conesRef.current) {
-      conesRef.current.children.forEach((cone, index) => {
-        cone.position.y = Math.sin(state.clock.elapsedTime * 2 + index) * 0.1;
-      });
+      infoDisplayRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
     }
   });
 
-  // Traffic cone for automotive theme
+  // Simplified traffic cone
   const TrafficCone = ({ position }: { position: [number, number, number] }) => (
     <group position={position}>
-      {/* Cone body */}
       <Cylinder
-        args={[0.3, 0.8, 2]}
-        position={[0, 1, 0]}
-        castShadow
+        args={[0.3, 0.6, 1.5]}
+        position={[0, 0.75, 0]}
+        castShadow={false}
         receiveShadow
       >
         <meshStandardMaterial color="#ff4500" roughness={0.8} />
       </Cylinder>
-      {/* White stripes */}
       <Cylinder
-        args={[0.32, 0.82, 0.2]}
-        position={[0, 1.4, 0]}
-        castShadow
-      >
-        <meshStandardMaterial color="#ffffff" />
-      </Cylinder>
-      <Cylinder
-        args={[0.45, 0.75, 0.2]}
-        position={[0, 0.6, 0]}
-        castShadow
-      >
-        <meshStandardMaterial color="#ffffff" />
-      </Cylinder>
-      {/* Base */}
-      <Cylinder
-        args={[1, 1, 0.2]}
-        position={[0, 0.1, 0]}
-        castShadow
+        args={[0.8, 0.8, 0.1]}
+        position={[0, 0.05, 0]}
+        castShadow={false}
         receiveShadow
       >
         <meshStandardMaterial color="#333333" />
@@ -60,52 +35,32 @@ const ShowroomObjects = () => {
     </group>
   );
 
-  // Directional arrow signs
+  // Simplified directional sign
   const DirectionalSign = ({ position, rotation, text }: { 
     position: [number, number, number], 
     rotation?: [number, number, number],
     text: string 
   }) => (
     <group position={position} rotation={rotation}>
-      {/* Sign post */}
       <Cylinder
-        args={[0.1, 0.1, 3]}
-        position={[0, 1.5, 0]}
-        castShadow
+        args={[0.08, 0.08, 2.5]}
+        position={[0, 1.25, 0]}
+        castShadow={false}
         receiveShadow
       >
-        <meshStandardMaterial color="#888888" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#888888" />
       </Cylinder>
-      {/* Sign board */}
-      <RoundedBox
-        args={[3, 0.8, 0.1]}
-        position={[0, 2.5, 0]}
-        radius={0.05}
-        castShadow
+      <Box
+        args={[2.5, 0.6, 0.08]}
+        position={[0, 2.2, 0]}
+        castShadow={false}
         receiveShadow
       >
-        <meshStandardMaterial color="#1e40af" metalness={0.3} roughness={0.7} />
-      </RoundedBox>
-      {/* Arrow */}
-      <Box
-        args={[1, 0.2, 0.05]}
-        position={[-0.5, 2.5, 0.06]}
-        castShadow
-      >
-        <meshStandardMaterial color="#ffffff" />
+        <meshStandardMaterial color="#1e40af" />
       </Box>
-      <Box
-        args={[0.3, 0.3, 0.05]}
-        position={[0.2, 2.5, 0.06]}
-        rotation={[0, 0, Math.PI / 4]}
-        castShadow
-      >
-        <meshStandardMaterial color="#ffffff" />
-      </Box>
-      {/* Text */}
       <Text
-        position={[0.5, 2.3, 0.1]}
-        fontSize={0.12}
+        position={[0, 2.2, 0.05]}
+        fontSize={0.1}
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
@@ -116,78 +71,60 @@ const ShowroomObjects = () => {
     </group>
   );
 
-  // Barrier posts around the showroom perimeter
+  // Simplified barrier post
   const BarrierPost = ({ position }: { position: [number, number, number] }) => (
     <group position={position}>
-      {/* Post */}
       <Cylinder
-        args={[0.15, 0.15, 3]}
-        position={[0, 1.5, 0]}
-        castShadow
+        args={[0.12, 0.12, 2.5]}
+        position={[0, 1.25, 0]}
+        castShadow={false}
         receiveShadow
       >
-        <meshStandardMaterial color="#333333" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#333333" />
       </Cylinder>
-      {/* Base */}
       <Cylinder
-        args={[0.4, 0.4, 0.3]}
-        position={[0, 0.15, 0]}
-        castShadow
+        args={[0.3, 0.3, 0.2]}
+        position={[0, 0.1, 0]}
+        castShadow={false}
         receiveShadow
       >
         <meshStandardMaterial color="#444444" />
       </Cylinder>
-      {/* Chain connection point */}
-      <Box
-        args={[0.1, 0.1, 0.1]}
-        position={[0, 2.5, 0]}
-        castShadow
-      >
-        <meshStandardMaterial color="#888888" metalness={1} roughness={0.1} />
-      </Box>
     </group>
   );
 
-  // Information display pedestals
+  // Simplified information display
   const InfoDisplay = ({ position, text }: { position: [number, number, number], text: string }) => (
-    <group position={position} ref={infoDisplayRef}>
-      {/* Pedestal base */}
+    <group position={position}>
       <Cylinder
-        args={[1.2, 1.5, 0.8]}
-        position={[0, 0.4, 0]}
-        castShadow
+        args={[1.0, 1.2, 0.6]}
+        position={[0, 0.3, 0]}
+        castShadow={false}
         receiveShadow
       >
-        <meshStandardMaterial color="#2c3e50" metalness={0.3} roughness={0.7} />
+        <meshStandardMaterial color="#2c3e50" />
       </Cylinder>
-      {/* Display screen */}
-      <RoundedBox
-        args={[2, 1.2, 0.1]}
-        position={[0, 1.5, 0]}
-        radius={0.05}
-        castShadow
+      <Box
+        args={[1.6, 1.0, 0.08]}
+        position={[0, 1.2, 0]}
+        castShadow={false}
         receiveShadow
       >
-        <meshStandardMaterial color="#1a1a1a" metalness={0.9} roughness={0.1} />
-      </RoundedBox>
-      {/* Screen glow */}
-      <RoundedBox
-        args={[1.8, 1, 0.05]}
-        position={[0, 1.55, 0.06]}
-        radius={0.02}
+        <meshStandardMaterial color="#1a1a1a" />
+      </Box>
+      <Box
+        args={[1.4, 0.8, 0.04]}
+        position={[0, 1.22, 0.05]}
       >
         <meshStandardMaterial 
           color="#00ff88" 
           emissive="#00ff88" 
-          emissiveIntensity={0.3}
-          transparent
-          opacity={0.8}
+          emissiveIntensity={0.2}
         />
-      </RoundedBox>
-      {/* Text */}
+      </Box>
       <Text
-        position={[0, 1.55, 0.1]}
-        fontSize={0.15}
+        position={[0, 1.22, 0.08]}
+        fontSize={0.08}
         color="#00ff88"
         anchorX="center"
         anchorY="middle"
@@ -198,86 +135,48 @@ const ShowroomObjects = () => {
     </group>
   );
 
-  // Decorative ceiling beams
+  // Simplified ceiling beam
   const CeilingBeam = ({ position, rotation }: { 
     position: [number, number, number], 
     rotation?: [number, number, number] 
   }) => (
     <Box
-      args={[30, 0.5, 1]}
+      args={[25, 0.4, 0.8]}
       position={position}
       rotation={rotation}
-      castShadow
+      castShadow={false}
       receiveShadow
     >
-      <meshStandardMaterial color="#34495e" metalness={0.4} roughness={0.6} />
-    </Box>
-  );
-
-  // Wall panels for showroom atmosphere
-  const WallPanel = ({ position, rotation }: { 
-    position: [number, number, number], 
-    rotation?: [number, number, number] 
-  }) => (
-    <Box
-      args={[15, 8, 0.5]}
-      position={position}
-      rotation={rotation}
-      receiveShadow
-    >
-      <meshStandardMaterial 
-        color="#ecf0f1" 
-        roughness={0.8}
-        metalness={0.1}
-      />
+      <meshStandardMaterial color="#34495e" />
     </Box>
   );
 
   return (
     <group name="showroom-objects">
-      {/* Traffic cones for automotive atmosphere */}
-      <group ref={conesRef}>
-        <TrafficCone position={[12, 0, 25]} />
-        <TrafficCone position={[-12, 0, 25]} />
-        <TrafficCone position={[25, 0, 12]} />
-        <TrafficCone position={[-25, 0, 12]} />
-      </group>
+      {/* Reduced traffic cones */}
+      <TrafficCone position={[15, 0, 20]} />
+      <TrafficCone position={[-15, 0, 20]} />
 
-      {/* Directional signs */}
-      <DirectionalSign position={[18, 0, -25]} text="ENTRANCE" />
-      <DirectionalSign position={[-18, 0, -25]} rotation={[0, Math.PI, 0]} text="EXIT" />
-      <DirectionalSign position={[25, 0, -8]} rotation={[0, -Math.PI/2, 0]} text="PARKING" />
-      <DirectionalSign position={[-25, 0, -8]} rotation={[0, Math.PI/2, 0]} text="SERVICE" />
+      {/* Reduced directional signs */}
+      <DirectionalSign position={[18, 0, -22]} text="ENTRANCE" />
+      <DirectionalSign position={[-18, 0, -22]} rotation={[0, Math.PI, 0]} text="EXIT" />
 
-      {/* Barrier posts around the perimeter */}
-      <group ref={barrierGroupRef}>
-        <BarrierPost position={[25, 0, 25]} />
-        <BarrierPost position={[-25, 0, 25]} />
-        <BarrierPost position={[25, 0, -25]} />
-        <BarrierPost position={[-25, 0, -25]} />
-        <BarrierPost position={[0, 0, 30]} />
-        <BarrierPost position={[0, 0, -30]} />
-        <BarrierPost position={[30, 0, 0]} />
-        <BarrierPost position={[-30, 0, 0]} />
-      </group>
+      {/* Reduced barrier posts */}
+      <BarrierPost position={[20, 0, 20]} />
+      <BarrierPost position={[-20, 0, 20]} />
+      <BarrierPost position={[20, 0, -20]} />
+      <BarrierPost position={[-20, 0, -20]} />
+      <BarrierPost position={[0, 0, 25]} />
+      <BarrierPost position={[0, 0, -25]} />
 
-      {/* Information displays */}
-      <InfoDisplay position={[15, 0, -20]} text="PREMIUM VEHICLES" />
-      <InfoDisplay position={[-15, 0, -20]} text="LUXURY COLLECTION" />
-      <InfoDisplay position={[20, 0, 15]} text="SPECIFICATIONS" />
-      <InfoDisplay position={[-20, 0, 15]} text="FEATURES" />
+      {/* Reduced information displays */}
+      <InfoDisplay position={[12, 0, -15]} text="PREMIUM" />
+      <InfoDisplay position={[-12, 0, -15]} text="LUXURY" />
 
-      {/* Ceiling beams for industrial showroom feel */}
-      <CeilingBeam position={[0, 12, 0]} />
-      <CeilingBeam position={[0, 12, 15]} />
-      <CeilingBeam position={[0, 12, -15]} />
-      <CeilingBeam position={[15, 12, 0]} rotation={[0, Math.PI / 2, 0]} />
-      <CeilingBeam position={[-15, 12, 0]} rotation={[0, Math.PI / 2, 0]} />
-
-      {/* Wall panels for showroom backdrop */}
-      <WallPanel position={[0, 4, -40]} />
-      <WallPanel position={[40, 4, 0]} rotation={[0, Math.PI / 2, 0]} />
-      <WallPanel position={[-40, 4, 0]} rotation={[0, Math.PI / 2, 0]} />
+      {/* Simplified ceiling beams */}
+      <CeilingBeam position={[0, 11, 0]} />
+      <CeilingBeam position={[12, 11, 0]} rotation={[0, Math.PI / 2, 0]} />
+      <CeilingBeam position={[-12, 11, 0]} rotation={[0, Math.PI / 2, 0]} />
     </group>
   );
 };

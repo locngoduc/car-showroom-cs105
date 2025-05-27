@@ -1,5 +1,4 @@
 import {
-  BakeShadows,
   Html,
   OrbitControls,
   PerspectiveCamera,
@@ -64,7 +63,7 @@ const Scene = () => {
       setIsFloorVisible(true);
       setIsModelReady(true);
       setIsLoading(false);
-    }, 3000);
+    }, 1500);
   }, [selectedCar]);
 
   const CarModelComponent =
@@ -87,7 +86,7 @@ const Scene = () => {
           {/* Performance monitor - shows when UI is open and perf is enabled */}
           {isUIVisible && isPerfVisible && (
             <Perf 
-              position="top-left"
+              position="bottom-right"
               showGraph={true}
               deepAnalyze={true}
               colorBlind={false}
@@ -106,13 +105,13 @@ const Scene = () => {
           <OrbitControls
             makeDefault
             enablePan={false}
-            autoRotate
-            autoRotateSpeed={0.6}
+            autoRotate={false}
+            autoRotateSpeed={0.4}
             minPolarAngle={1.15}
             maxPolarAngle={Math.PI - 1.55}
             enableZoom={false}
             enableRotate={true}
-            rotateSpeed={0.6}
+            rotateSpeed={0.8}
             ref={orbitControlsRef}
             minDistance={20}
             maxDistance={maxDistance + 2}
@@ -137,7 +136,6 @@ const Scene = () => {
                       distance={0.7}
                     />
                   )}
-                  <BakeShadows />
                 </Suspense>
               )}
             </>
