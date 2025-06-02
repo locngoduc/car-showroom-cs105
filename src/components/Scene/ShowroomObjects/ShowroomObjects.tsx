@@ -1,21 +1,80 @@
-import { Box, Cylinder, RoundedBox, Text } from "@react-three/drei";
+import { Box, Cylinder, RoundedBox, Text, SpotLight } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
 const ShowroomObjects = () => {
   const infoDisplayRef = useRef<THREE.Group>(null);
+  const trafficConeRefs = useRef<THREE.Group[]>([]);
+  const directionalSignRefs = useRef<THREE.Group[]>([]);
+  const barrierPostRefs = useRef<THREE.Group[]>([]);
+  const spotlightRef = useRef<THREE.Group>(null);
 
-  // Reduced animation for better performance
+  // Animation for spotlight
+  useFrame((state) => {
+    if (spotlightRef.current) {
+      // Rotate the spotlight around the car
+      const radius = 15;
+      const speed = 0.2;
+      const time = state.clock.elapsedTime * speed;
+      
+      spotlightRef.current.position.x = Math.cos(time) * radius;
+      spotlightRef.current.position.z = Math.sin(time) * radius;
+      spotlightRef.current.position.y = 8; // Height of the spotlight
+      
+      // Make the spotlight always point at the center (car)
+      spotlightRef.current.lookAt(0, 0, 0);
+    }
+  });
+
+  // Animation for info displays
   useFrame((state) => {
     if (infoDisplayRef.current) {
-      infoDisplayRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.05;
+      infoDisplayRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
+      // Add pulsing effect to the display
+      const scale = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.05;
+      infoDisplayRef.current.scale.set(scale, scale, scale);
     }
+  });
+
+  // Animation for traffic cones
+  useFrame((state) => {
+    trafficConeRefs.current.forEach((cone) => {
+      if (cone) {
+        // More pronounced swaying motion
+        cone.rotation.z = Math.sin(state.clock.elapsedTime * 0.8) * 0.2;
+      }
+    });
+  });
+
+  // Animation for directional signs
+  useFrame((state) => {
+    directionalSignRefs.current.forEach((sign) => {
+      if (sign) {
+        // More noticeable rotation
+        sign.rotation.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.15;
+      }
+    });
+  });
+
+  // Animation for barrier posts
+  useFrame((state) => {
+    barrierPostRefs.current.forEach((post) => {
+      if (post) {
+        // More noticeable floating motion
+        post.position.y = Math.sin(state.clock.elapsedTime * 1.2) * 0.2;
+      }
+    });
   });
 
   // Simplified traffic cone
   const TrafficCone = ({ position }: { position: [number, number, number] }) => (
-    <group position={position}>
+    <group 
+      position={position}
+      ref={(el) => {
+        if (el) trafficConeRefs.current.push(el);
+      }}
+    >
       <Cylinder
         args={[0.3, 0.6, 1.5]}
         position={[0, 0.75, 0]}
@@ -41,7 +100,13 @@ const ShowroomObjects = () => {
     rotation?: [number, number, number],
     text: string 
   }) => (
-    <group position={position} rotation={rotation}>
+    <group 
+      position={position} 
+      rotation={rotation}
+      ref={(el) => {
+        if (el) directionalSignRefs.current.push(el);
+      }}
+    >
       <Cylinder
         args={[0.08, 0.08, 2.5]}
         position={[0, 1.25, 0]}
@@ -73,7 +138,12 @@ const ShowroomObjects = () => {
 
   // Simplified barrier post
   const BarrierPost = ({ position }: { position: [number, number, number] }) => (
-    <group position={position}>
+    <group 
+      position={position}
+      ref={(el) => {
+        if (el) barrierPostRefs.current.push(el);
+      }}
+    >
       <Cylinder
         args={[0.12, 0.12, 2.5]}
         position={[0, 1.25, 0]}
@@ -95,7 +165,10 @@ const ShowroomObjects = () => {
 
   // Simplified information display
   const InfoDisplay = ({ position, text }: { position: [number, number, number], text: string }) => (
-    <group position={position}>
+    <group 
+      position={position}
+      ref={infoDisplayRef}
+    >
       <Cylinder
         args={[1.0, 1.2, 0.6]}
         position={[0, 0.3, 0]}
@@ -151,17 +224,41 @@ const ShowroomObjects = () => {
     </Box>
   );
 
+  // Add Spotlight component
+  const ShowroomSpotlight = () => (
+    <group ref={spotlightRef}>
+      <SpotLight
+        position={[0, 0, 0]}
+        distance={20}
+        angle={0.5}
+        attenuation={5}
+        anglePower={5}
+        intensity={2}
+        color="#ffffff"
+      />
+      {/* Add a visible light fixture */}
+      <Cylinder
+        args={[0.2, 0.2, 0.5]}
+        position={[0, -0.25, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <meshStandardMaterial color="#444444" />
+      </Cylinder>
+    </group>
+  );
+
   return (
     <group name="showroom-objects">
-      {/* Reduced traffic cones */}
+      {/* Add the spotlight */}
+      <ShowroomSpotlight />
+
+      {/* Existing objects */}
       <TrafficCone position={[15, 0, 20]} />
       <TrafficCone position={[-15, 0, 20]} />
 
-      {/* Reduced directional signs */}
       <DirectionalSign position={[18, 0, -22]} text="ENTRANCE" />
       <DirectionalSign position={[-18, 0, -22]} rotation={[0, Math.PI, 0]} text="EXIT" />
 
-      {/* Reduced barrier posts */}
       <BarrierPost position={[20, 0, 20]} />
       <BarrierPost position={[-20, 0, 20]} />
       <BarrierPost position={[20, 0, -20]} />
@@ -169,11 +266,9 @@ const ShowroomObjects = () => {
       <BarrierPost position={[0, 0, 25]} />
       <BarrierPost position={[0, 0, -25]} />
 
-      {/* Reduced information displays */}
       <InfoDisplay position={[12, 0, -15]} text="PREMIUM" />
       <InfoDisplay position={[-12, 0, -15]} text="LUXURY" />
 
-      {/* Simplified ceiling beams */}
       <CeilingBeam position={[0, 11, 0]} />
       <CeilingBeam position={[12, 11, 0]} rotation={[0, Math.PI / 2, 0]} />
       <CeilingBeam position={[-12, 11, 0]} rotation={[0, Math.PI / 2, 0]} />
