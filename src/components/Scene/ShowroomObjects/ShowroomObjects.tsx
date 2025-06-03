@@ -9,6 +9,8 @@ const ShowroomObjects = () => {
   const directionalSignRefs = useRef<THREE.Group[]>([]);
   const barrierPostRefs = useRef<THREE.Group[]>([]);
   const spotlightRef = useRef<THREE.Group>(null);
+  const yellowRef = useRef<THREE.Mesh>(null);
+  const yellowLightRef = useRef<THREE.PointLight>(null);
 
   // Animation for spotlight
   useFrame((state) => {
@@ -17,11 +19,11 @@ const ShowroomObjects = () => {
       const radius = 15;
       const speed = 0.2;
       const time = state.clock.elapsedTime * speed;
-      
+
       spotlightRef.current.position.x = Math.cos(time) * radius;
       spotlightRef.current.position.z = Math.sin(time) * radius;
       spotlightRef.current.position.y = 8; // Height of the spotlight
-      
+
       // Make the spotlight always point at the center (car)
       spotlightRef.current.lookAt(0, 0, 0);
     }
@@ -30,7 +32,8 @@ const ShowroomObjects = () => {
   // Animation for info displays
   useFrame((state) => {
     if (infoDisplayRef.current) {
-      infoDisplayRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
+      infoDisplayRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.5) * 0.15;
       // Add pulsing effect to the display
       const scale = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.05;
       infoDisplayRef.current.scale.set(scale, scale, scale);
@@ -67,9 +70,24 @@ const ShowroomObjects = () => {
     });
   });
 
+  useFrame((state) => {
+    if (yellowRef.current) {
+      const blink = Math.floor(state.clock.elapsedTime * 2) % 2 === 0;
+      const mat = yellowRef.current.material as THREE.MeshStandardMaterial;
+      mat.emissiveIntensity = blink ? 1.5 : 0.1;
+      if (yellowLightRef.current) {
+        yellowLightRef.current.intensity = blink ? 2 : 0;
+      }
+    }
+  });
+
   // Simplified traffic cone
-  const TrafficCone = ({ position }: { position: [number, number, number] }) => (
-    <group 
+  const TrafficCone = ({
+    position,
+  }: {
+    position: [number, number, number];
+  }) => (
+    <group
       position={position}
       ref={(el) => {
         if (el) trafficConeRefs.current.push(el);
@@ -95,13 +113,17 @@ const ShowroomObjects = () => {
   );
 
   // Simplified directional sign
-  const DirectionalSign = ({ position, rotation, text }: { 
-    position: [number, number, number], 
-    rotation?: [number, number, number],
-    text: string 
+  const DirectionalSign = ({
+    position,
+    rotation,
+    text,
+  }: {
+    position: [number, number, number];
+    rotation?: [number, number, number];
+    text: string;
   }) => (
-    <group 
-      position={position} 
+    <group
+      position={position}
       rotation={rotation}
       ref={(el) => {
         if (el) directionalSignRefs.current.push(el);
@@ -137,8 +159,12 @@ const ShowroomObjects = () => {
   );
 
   // Simplified barrier post
-  const BarrierPost = ({ position }: { position: [number, number, number] }) => (
-    <group 
+  const BarrierPost = ({
+    position,
+  }: {
+    position: [number, number, number];
+  }) => (
+    <group
       position={position}
       ref={(el) => {
         if (el) barrierPostRefs.current.push(el);
@@ -164,11 +190,14 @@ const ShowroomObjects = () => {
   );
 
   // Simplified information display
-  const InfoDisplay = ({ position, text }: { position: [number, number, number], text: string }) => (
-    <group 
-      position={position}
-      ref={infoDisplayRef}
-    >
+  const InfoDisplay = ({
+    position,
+    text,
+  }: {
+    position: [number, number, number];
+    text: string;
+  }) => (
+    <group position={position} ref={infoDisplayRef}>
       <Cylinder
         args={[1.0, 1.2, 0.6]}
         position={[0, 0.3, 0]}
@@ -185,13 +214,10 @@ const ShowroomObjects = () => {
       >
         <meshStandardMaterial color="#1a1a1a" />
       </Box>
-      <Box
-        args={[1.4, 0.8, 0.04]}
-        position={[0, 1.22, 0.05]}
-      >
-        <meshStandardMaterial 
-          color="#00ff88" 
-          emissive="#00ff88" 
+      <Box args={[1.4, 0.8, 0.04]} position={[0, 1.22, 0.05]}>
+        <meshStandardMaterial
+          color="#00ff88"
+          emissive="#00ff88"
           emissiveIntensity={0.2}
         />
       </Box>
@@ -209,9 +235,12 @@ const ShowroomObjects = () => {
   );
 
   // Simplified ceiling beam
-  const CeilingBeam = ({ position, rotation }: { 
-    position: [number, number, number], 
-    rotation?: [number, number, number] 
+  const CeilingBeam = ({
+    position,
+    rotation,
+  }: {
+    position: [number, number, number];
+    rotation?: [number, number, number];
   }) => (
     <Box
       args={[25, 0.4, 0.8]}
@@ -247,6 +276,97 @@ const ShowroomObjects = () => {
     </group>
   );
 
+  const TrafficLight = ({
+    position,
+  }: {
+    position: [number, number, number];
+  }) => (
+    <group position={position}>
+      {/* Pole - taller */}
+      <Cylinder args={[0.12, 0.12, 9]} position={[0, 4.5, 0]}>
+        <meshStandardMaterial color="#2C2C2B" />
+      </Cylinder>
+      {/* Light box - bigger */}
+      <Box args={[0.7, 2.2, 0.7]} position={[0, 8, 0]}>
+        <meshStandardMaterial color="#2C2C2B" />
+      </Box>
+      {/* Red light (off, almost black) */}
+      <mesh position={[0, 8.75, -0.38]}>
+        <sphereGeometry args={[0.25, 16, 16]} />
+        <meshStandardMaterial
+          color="#120000"
+          emissive="#120000"
+          emissiveIntensity={0.1}
+        />
+      </mesh>
+      {/* Yellow light (blinking) */}
+      <mesh position={[0, 8, -0.38]} ref={yellowRef}>
+        <sphereGeometry args={[0.25, 16, 16]} />
+        <meshStandardMaterial
+          color="#222200"
+          emissive="#ffff00"
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+      {/* Yellow point light */}
+      <pointLight
+        ref={yellowLightRef}
+        position={[0, 8, -0.38]}
+        color="#ffff80"
+        intensity={2}
+        distance={2.5}
+        decay={2}
+        castShadow={false}
+      />
+      {/* Green light (off, almost black) */}
+      <mesh position={[0, 7.25, -0.38]}>
+        <sphereGeometry args={[0.25, 16, 16]} />
+        <meshStandardMaterial
+          color="#001200"
+          emissive="#001200"
+          emissiveIntensity={0.1}
+        />
+      </mesh>
+    </group>
+  );
+
+  const StopSign = ({
+    position = [0, 0, 0],
+    rotation = [0, 0, 0],
+  }: {
+    position?: [number, number, number];
+    rotation?: [number, number, number];
+  }) => (
+    <group position={position} rotation={rotation}>
+      {/* Pole */}
+      <Cylinder args={[0.07, 0.07, 6.2]} position={[0, -1.1, 0]}>
+        <meshStandardMaterial color="#888" />
+      </Cylinder>
+      {/* Octagonal sign */}
+      <mesh position={[0, 2.8, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.85, 0.85, 0.08, 8]} />
+        <meshStandardMaterial color="#c00" />
+      </mesh>
+      {/* White border */}
+      <mesh position={[0, 2.81, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.9, 0.9, 0.01, 8]} />
+        <meshStandardMaterial color="#fff" />
+      </mesh>
+      {/* STOP text */}
+      <Text
+        position={[0, 2.82, 0.045]}
+        fontSize={0.46}
+        color="#fff"
+        anchorX="center"
+        anchorY="middle"
+        outlineColor="#fff"
+        outlineWidth={0.01}
+      >
+        STOP
+      </Text>
+    </group>
+  );
+
   return (
     <group name="showroom-objects">
       {/* Add the spotlight */}
@@ -256,8 +376,16 @@ const ShowroomObjects = () => {
       <TrafficCone position={[15, 0, 20]} />
       <TrafficCone position={[-15, 0, 20]} />
 
+      <TrafficLight position={[5, -2, 15]} />
+
+      <StopSign position={[-10, 0, 10]} rotation={[0, -4, 0]} />
+
       <DirectionalSign position={[18, 0, -22]} text="ENTRANCE" />
-      <DirectionalSign position={[-18, 0, -22]} rotation={[0, Math.PI, 0]} text="EXIT" />
+      <DirectionalSign
+        position={[-18, 0, -22]}
+        rotation={[0, Math.PI, 0]}
+        text="EXIT"
+      />
 
       <BarrierPost position={[20, 0, 20]} />
       <BarrierPost position={[-20, 0, 20]} />
@@ -276,4 +404,4 @@ const ShowroomObjects = () => {
   );
 };
 
-export default ShowroomObjects; 
+export default ShowroomObjects;
